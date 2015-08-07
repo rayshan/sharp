@@ -2,9 +2,12 @@ language: node_js
 node_js:
   - "0.10"
   - "0.12"
-  - "iojs-v1"
   - "iojs-v2"
+os:
+  - linux
+  - osx
 before_install:
-  - curl -s https://raw.githubusercontent.com/lovell/sharp/master/preinstall.sh | sudo bash -
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then curl -s https://raw.githubusercontent.com/lovell/sharp/master/preinstall.sh | sudo bash -; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew tap homebrew/science && brew update && brew install vips --with-webp --with-graphicsmagick; fi
 after_success:
   - cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
